@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="images/logo.png" type="image/x-icon"/>
+    <title>你过来呀</title>
+    <style>
+        * {
+            user-select: none;
+            list-style-type: decimal;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: url("images/10.jpg");
+            background-size: 100% 100%;
+        }
+
+        .container {
+            width: 1200px;
+            height: 100%;
+            background: url("images/10.jpg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            /*background-size: cover;*//*把背景图像扩展至足够大，以使背景图像完全覆盖背景区域。*/
+            margin: 0 auto;
+            box-shadow: 0 0 5px 5px #fff;
+            background-clip: padding-box; /*背景被裁剪到内边距框。*/
+            overflow: hidden;
+        }
+
+        .scene {
+            width: 1000px;
+            height: 100%;
+            float: left;
+            position: relative;
+        }
+
+        .control {
+            width: 200px;
+            background: rgba(127, 102, 102, 0.63);
+            float: left;
+            height: 100%;
+            overflow: hidden;
+            transition: all 1s;
+        }
+
+        .letter {
+            width: 120px;
+            height: 120px;
+            position: absolute;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        .letter .active {
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+
+        .show {
+            width: 100%;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            color: #fff;
+            font-size: 20px;
+            font-style: italic;
+        }
+
+        .show + div {
+            width: 80%;
+            height: 30px;
+            background: #fff;
+            border-radius: 15px;
+            text-align: center;
+            border: 3px solid #000;
+            line-height: 30px;
+            margin: 10px auto;
+            color: #ff8130;
+            text-shadow: 0 0 2px #ff7d35;
+        }
+
+        .show {
+            margin-top: 20px;
+        }
+
+        button {
+            display: block;
+            width: 80%;
+            height: 30px;
+            border-radius: 15px;
+            margin: 30px auto;
+            border: none;
+            font-size: 20px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            transition: all .5s;
+            cursor: pointer;
+        }
+
+        button:hover {
+            box-shadow: 0 0 10px #fff;
+        }
+
+        button.start {
+            background: #00c600;
+        }
+
+        button.pause {
+            background: #ff7d59;
+        }
+
+        button.over {
+            background: #ff1546;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.about {
+            background: #6a72ff;
+        }
+
+        div.name {
+            width: 100%;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            background: #4ba85a;
+            cursor: pointer;
+        }
+
+        .message {
+            width: 300px;
+            height: 120px;
+            background: rgba(250, 250, 250, 0.58);
+            position: fixed;
+            left: calc(50% - 150px);
+            top: calc(50% - 50px);
+            z-index: 99;
+            border: 10px solid #838dff;
+            border-radius: 30px;
+            padding: 10px;
+            display: none;
+        }
+
+        .message p {
+            text-align: center;
+            padding: 15px 0;
+        }
+
+        .restart {
+            margin: 0 auto !important;
+        }
+
+        .btn {
+            width: 180px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            margin: 0 auto;
+            font-size: 16px;
+            color: #fff;
+            background: #838dff;
+            border-radius: 20px;
+        }
+
+        .btn:active {
+            box-shadow: 0 0 5px #000;
+        }
+
+        .fadeIn {
+            animation: fadeIn .5s linear;
+            display: block;
+        }
+
+        .phb {
+            width: 70px;
+            height: 70px;
+            background: rgba(55, 92, 250, 0.58);
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 70px;
+        }
+
+        .list {
+            width: 200px;
+            height: 200px;
+            background: #fff;
+            border: 10px solid #838dff;
+            border-radius: 30px;
+            display: none;
+        }
+        .list>li{
+            font-size: 20px;
+        }
+        .showphp {
+            display: block;
+        }
+        button.about {
+            background: #3cb3f0;
+        }
+        .message3 span{
+            color: #ff5018;
+        }
+        .guanbi{
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #838dff;
+            text-align: center;
+            line-height: 18px;
+            color: white;
+            float: right;
+            margin-top: -5px;
+            font-size: 20px;
+        }
+        button.description {
+            background: #f165e9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="scene"></div>
+    <div class="phb">排行榜
+        <ul class="list">
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div class="control">
+        <div class="show">得分</div>
+        <div class="scor">0</div>
+        <div class="show">关卡</div>
+        <div class="state">1</div>
+        <div class="show">生命</div>
+        <div class="life">5</div>
+        <button class="start">开始</button>
+        <button class="pause">暂停</button>
+        <button class="over">结束</button>
+        <button class="description">简介</button>
+        <button class="about">关于我们</button>
+    </div>
+    <div class="message">
+        <div class="guanbi">×</div>
+        <p>共消灭了 <span>0</span>个字母</p>
+    </div>
+    <div class="message message2">
+        <div class="guanbi guanbi2">×</div>
+        <p>不同的字母从上方落下，使用键盘A~Z键,按正确的按键就会得分，每10个字母为一关，关卡提升后字母下落速度加快，生命值5，错过5个字母就会结束游戏</p>
+    </div>
+    <div class="message message3">
+        <div class="guanbi guanbi3">×</div>
+        <p>本游戏游戏由 <span>赵珊珊、孙悦、薛丹丹</span>三人共同合作开发完成</p>
+    </div>
+
+</div>
+</body>
+<script>
+    // 面向对象编程
+    class Game {
+        constructor(setting) {
+            this.scene = document.querySelector(".scene");
+            this.scorEle = document.querySelector(".scor");//得分值
+            this.stateEle = document.querySelector(".state");//第几关
+            this.lifeEle = document.querySelector(".life");//生命值
+            this.initLife = setting.life;
+            this.message = document.querySelector('.message');
+            this.finalScor = document.querySelector('.message span');
+            //console.log(this.initLife);//5
+            this.h = window.innerHeight;//浏览器高度
+            //console.log(this.h);
+            this._init();//调用_init()函数
+            this.lists = lists;
+            this.bestscor = localStorage.bestscor ? JSON.parse(localStorage.bestscor) : [];
+        }
+
+        //初始化
+        _init() {
+            this.scor = 0;//初始得分为0
+            this.state = 1;//初始关为1
+            this.life = this.initLife || 5;//初始生命值为5或者获取的生命值
+            this.scorEle.innerHTML = this.scor;
+            this.stateEle.innerHTML = this.state;
+            this.lifeEle.innerHTML = this.life;
+            this.obj = {}; //保存当前字母以及字母的详细信息
+            this.num = 3;
+            this.speed = 3;//速度为5
+            this.t = 0;    // 当前setInterval的id
+            this.flag = true; //当前能不能开始
+            this.scene.innerHTML = "";
+        }
+
+        //部分初始化
+        _initBody() {
+            this.scorEle.innerHTML = this.scor;
+            this.stateEle.innerHTML = this.state;
+            this.lifeEle.innerHTML = this.life;
+            this.obj = {}; //保存当前字母以及字母的详细信息
+            this.num = 1;//每次3个字母
+            this.speed = 5;//速度为5
+            this.t = 0;    // 当前setInterval的id
+            this.flag = true; //当前能不能开始
+            this.scene.innerHTML = "";
+        }
+
+
+        //创建单个字母
+        _createLetter() {
+            let newdiv = document.createElement("div");
+            //console.log(newdiv);
+            newdiv.className = "letter";
+            //添加类名letter在div中
+            do {
+                var randomNum = Math.floor(Math.random() * 26 + 65);
+                //console.log(randomNum);//每个字母随机出现
+                var randomLetter = String.fromCharCode(randomNum);
+                //console.log(randomLetter);//获取随机出现的字母是什么
+                //fromCharCode() 可接受一个指定的 Unicode 值，然后返回一个字符串。
+                //接收指定的randomNum值并返回
+            } while (this.obj[randomLetter]);
+            do {
+                var randomLeft = Math.floor(Math.random() * 900);
+                //console.log(randomLeft);
+                //距离屏幕左边距
+            } while (this._checkLeft(randomLeft));
+            let randomTop = -Math.floor(Math.random() * 200);
+            newdiv.style.backgroundImage = "url(./images/" + randomLetter + ".png)";//添加图片
+            newdiv.style.left = randomLeft + "px";//创建的div左边距
+            newdiv.style.top = randomTop + "px";//上边距
+            this.scene.appendChild(newdiv);//屏幕里面添加创建的div
+            this.obj[randomLetter] = {left: randomLeft, top: randomTop, ele: newdiv};
+        }
+
+        //判断当前位置是否和其他任意一个位置重复的方法
+        _checkLeft(left) {
+            for (let i in this.obj) {
+                //i表示每一个字母
+                let obj = this.obj[i];//遍历i
+                if (left > obj.left - 100 && left < obj.left + 100) {
+                    return true;//因为每一个字母盒子大小为100*100
+                }
+            }
+        }
+
+        _move() {
+            this.t = setInterval(function () {
+                for (let i in this.obj) {//遍历obj中的i值
+                    let top = this.obj[i].top;//距离顶部的距离
+                    //console.log(top);
+                    top += this.speed;
+                    this.obj[i].ele.style.top = top + "px";
+                    this.obj[i].top = top;
+                    if (top > this.h) {//判断字母距离顶部的距离是否大于屏幕的距离
+                        this.life--;//字母超出屏幕，生命值降低
+                        this.lifeEle.innerHTML = this.life;
+                        this.scene.removeChild(this.obj[i].ele);//移除相应的obj
+                        delete this.obj[i];
+                        this._createLetter();
+                        if (this.life === 0) {
+                            this._gameoverBody();
+                        }//如果生命值为0，游戏结束
+                    }
+
+                }
+            }.bind(this), 50)
+        }
+
+        //键盘按下事件
+        _keydown() {
+            document.onkeydown = function (e) {//某个键按下
+                let kc = e.keyCode;//获取所按键盘码
+                //console.log(kc);
+                let letter = String.fromCharCode(kc);//接收所按键盘吗，返回值赋予letter
+                if (this.obj[letter]) {//如果所按键盘码与字母相同
+                    this.scene.removeChild(this.obj[letter].ele);//消除字母
+                    delete this.obj[letter];
+                    this._createLetter();
+
+                    this.scor++;//每次分数加1
+                    this.scorEle.innerHTML = this.scor;
+                    if (this.scor % 10 === 0) {
+                        this._nextState();//每十分进入下一级
+
+                    }
+                }
+            }.bind(this);
+        }
+
+        _nextState() {
+            this.state++;//等级加1
+            this.stateEle.innerHTML = this.state;
+            if (this.state <= 3) {//如果等级小于等于3级，创建单个字母
+                this._createLetter();
+            } else {//大于三级，速度+2
+                this.speed += 1;
+            }
+        }
+        
+
+        _gameoverBody() {
+            setTimeout(function () {
+                alert(`当前得分为${this.scor}`);
+                if (this.bestscor.length < 3 || (this.bestscor.length >= 3 && this.scor > this.bestscor[2].scor)) {
+                    var player = prompt("请输入姓名");
+                    this.bestscor.push({player, scor: this.scor});
+                    this.bestscor.sort(function (a, b) {
+                        if (a.scor > b.scor) {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    });
+                    if (this.bestscor.length > 3) {
+                        this.bestscor.pop();
+                    }
+                    localStorage.bestscor = JSON.stringify(this.bestscor);
+                }
+                this.bestscor.forEach(function (v, i) {
+                    console.log(this);
+                    this.lists[i].innerHTML = `姓名:${v.player}   成绩:${v.scor}`;
+                }.bind(this));
+                this.message.classList.add("fadeIn");
+                this.finalScor.innerHTML = this.scor;
+                clearInterval(this.t);
+                this._initBody();//初始化游戏
+            }.bind(this), 50);
+        }
+
+        start() {//开始
+            this._init();
+            for (let i = 0; i < this.num; i++) {
+                this._createLetter();
+            }
+            this._move();
+            this._keydown();
+            this.bestscor = localStorage.bestscor ? JSON.parse(localStorage.bestscor) : [];
+        }
+
+        pause() {
+            clearInterval(this.t);
+            document.onkeydown = null;
+        }
+
+        play() {
+            this._move();
+            this._keydown();
+        }
+    }
+
+    var phb = document.querySelector(".phb");
+    var list = document.querySelector(".list");
+    var lists = document.querySelectorAll(".list li");
+    var game = new Game({life: 5});
+    var flag = true;
+    var startBtn = document.querySelector(".start");
+    var pause = document.querySelector(".pause");
+    var message2=document.querySelector('.message2');
+    var message3=document.querySelector('.message3');
+     pause.onclick = function () {
+        message2.classList.remove("fadeIn");
+        message3.classList.remove("fadeIn");
+        if (game.flag === false) {
+            if (flag) {
+                pause.innerHTML = "继续";
+                game.pause();
+            } else {
+                pause.innerHTML = "暂停";
+                game.play();
+            }
+        } else {
+            pause.innerHTML = "暂停";
+        }
+        flag = !flag;
+    };
+
+    startBtn.onclick = function () {
+        if (game.flag) {
+            game.start();
+            game.flag = false;
+            pause.innerHTML = "暂停";
+            game.message.classList.remove("fadeIn");
+            message2.classList.remove("fadeIn");
+            message3.classList.remove("fadeIn");
+        }
+        flag = true;
+    };
+    var over = document.querySelector(".over");
+    over.onclick = function () {
+        if (flag) {
+            game._gameoverBody();
+            pause.innerHTML = "暂停";
+        }
+        flag = true;
+    };
+    var games = game.bestscor;
+    console.log(games);
+    phb.onclick = function () {
+        list.classList.toggle("showphp");
+        games.forEach(function (v,i) {
+            lists[i].innerHTML = `姓名:${v.player}   成绩:${v.scor}`;
+        }.bind(games));
+    };
+    var message=document.querySelector('.message');
+    var description=document.querySelector('.description');
+    var about=document.querySelector('.about');
+    description.onclick=function () {
+        message2.classList.add("fadeIn");
+        message.classList.remove("fadeIn");
+        message3.classList.remove("fadeIn");
+        pause.innerHTML = "继续";
+        game.pause();
+
+    };
+    about.onclick=function () {
+        message3.classList.add("fadeIn");
+        message.classList.remove("fadeIn");
+        message2.classList.remove("fadeIn");
+        pause.innerHTML = "继续";
+        game.pause();
+    };
+    var guanbi=document.querySelector('.guanbi');
+    var guanbi2=document.querySelector('.guanbi2');
+    var guanbi3=document.querySelector('.guanbi3');
+    guanbi.onclick=function () {
+        message.classList.remove("fadeIn");
+    };
+    guanbi2.onclick=function () {
+        message2.classList.remove("fadeIn");
+        pause.innerHTML = "暂停";
+        game.play();
+    };
+    guanbi3.onclick=function () {
+        message3.classList.remove("fadeIn");
+        pause.innerHTML = "暂停";
+        game.play();
+    };
+
+</script>
+</html>
